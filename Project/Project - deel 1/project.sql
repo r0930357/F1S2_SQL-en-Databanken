@@ -273,7 +273,7 @@ GO
 --                         PK  ,                                                                , FK         , FK       , FK
 --                         INT , FLOAT  , VARCHAR            , VARCHAR        , BIT             , INT        , INT      , INT
 --                         N0  , NOT 0  , NULL               , NULL           , NULL            , NOT NULL   , NULL     , NOT NULL
-INSERT [project].[Aanbod] ([ID], [prijs], [productAfbeelding], [productStatus], [isGereserveerd], [productID], [koperID], [verkoperID]) VALUES (1, 1000, 'afbeelding1.jpg', 'nieuwstaat', 0, 3, 2, 10);
+INSERT [project].[Aanbod] ([ID], [prijs], [productAfbeelding], [productStatus], [isGereserveerd], [productID], [koperID], [verkoperID]) VALUES (1, 1000, 'afbeelding1.jpg', 'nieuwstaat', 0, 3, NULL, 10);
 SET IDENTITY_INSERT [project].[Aanbod] OFF
 GO
 
