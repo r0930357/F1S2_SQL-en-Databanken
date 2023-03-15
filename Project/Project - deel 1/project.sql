@@ -71,7 +71,7 @@ CREATE TABLE project.GebruikerProduct(
 
 CREATE TABLE project.ProductReview(
     ID int IDENTITY(1,1) NOT NULL,
-    datum smalldatetime NOT NULL,
+    datum date NOT NULL,
     hoofding varchar(80) NOT NULL,
     inhoud varchar(2000) NOT NULL,
     eindoordeel int NOT NULL,
@@ -131,6 +131,10 @@ GO
 
 SET IDENTITY_INSERT [project].[Adres] ON 
 GO
+
+--                        PK
+--                        INT , VARCHAR,  VARCHAR     , VARCHAR   , VARCHAR   , VARCHAR
+--                        N0  , NOT NULL, NOT NULL    , NOT NULL  , NULL      , NULL
 INSERT [project].[Adres] ([ID], [straat], [huisnummer], [gemeente], [postcode], [land]) VALUES (1, 'Kleinhoefstraat', '4', 'Geel', '2440', 'België')
 INSERT [project].[Adres] ([ID], [straat], [huisnummer], [gemeente], [postcode], [land]) VALUES (2, 'Dorpstraat', '15', 'Antwerpen', '2000', 'België')
 INSERT [project].[Adres] ([ID], [straat], [huisnummer], [gemeente], [postcode], [land]) VALUES (3, 'Schoolstraat', '23', 'Gent', '9000', 'België')
@@ -176,22 +180,57 @@ GO
 
 SET IDENTITY_INSERT [project].[Gebruiker] ON
 GO
+--                            PK  ,                                                                                                                                                              , FK
+--                            INT , VARCHAR,    VARCHAR   , VARCHAR      , VARCHAR, VARCHAR         , DATE          , DATE         , DATE          , VARCHAR       , VARCHAR     , BIT           , INT
+--                            N0  , NOT NULL  , NOT NULL  , NOT NULL     , NULL   , NULL            , NOT NULL      , NULL         , NULL          , NULL          , NULL        , NULL          , NOT NULL
 INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (1, 'r0930357', 'Tom', 'Belmans', 'r0930357@student.thomasmore.be', '', '1980-11-20', '2023-01-01', '2024-01-01', 'Niet jong, wel gek', 'selfie.jpg', 0, 1);
-INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (2, 'reduf55', 'Reinhout', 'Dufour', 'rdufour55@pandora.be', '0498238244', '1993-04-08', '', '', 'Waarom zijn de bananen krom?', 'rd_me.jpg', 0, 1);
-INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (3, 'juliahn', 'Julia', 'Michaels', 'juliahnmusic@gmail.com', '310-691-4489', '2015-01-01', '', '', 'I have no issues, or do I?', 'juliahn.jpg', 0, 2);
-INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (4, 'taylorswift', 'Taylor', 'Swift', 'tswift@taylorswift.com', '615-555-5555', '2006-01-01', '', '', 'Folklore', 'taylorswift.jpg', 0, 3);
-INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (5, 'queen', 'Freddie', 'Mercury', 'freddie@queen.com.uk', '020-7734-8932', '1956-08-01', '', '', 'Beelzebub has a devil put aside for me', 'freddie.jpg', 1, 4);
-INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (6, 'theKing', 'Elvis', 'Presley', 'elvis@elvismusic.com', '901-332-3329', '1954-01-01', '', '', 'I love music and hamburgers', 'elvis.jpg', 1, 5);
-INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (7, 'theking2', 'Michael', 'Jackson', 'mjackson@neverland.com', '310-859-7500', '1964-01-01', '', '', 'Thriller', 'michaeljackson.jpg', 1, 6);
-INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (8, 'TheQueenOfPop', 'Madonna', 'Ciccone', 'madonna@lmcvrecords.com', '612-764-0850', '1958-08-16', '', '', 'I sing like a virgin, I look like Billy the puppet (Saw)', 'madonna.jpg', 1, 7);
-INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (9, 'INSERT_SYMBOL', 'Prince', 'Nelson', 'prince@paisley.com', '612-764-0850', '1978-01-01', '1978-02-01', '2016-04-21', 'Purple Rain Like its 1999', 'prince.jpg', 1, 7);
-INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (10, 'yokos_beatle', 'John', 'Lennon', 'johnlennon@thebeatles.com', '020-7361-7676', '1960-01-01', '', '', 'Sergant Peppers trooper', 'johnlennon.jpg', 1, 8);
-INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (11, 'nirvana', 'Kurt', 'Cobain', 'kcobain@nirvana.com', '206-302-6957', '1987-01-01', '', '', 'I made some mind-blowing music', 'kurdtcobain.jpg', 1, 9);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (2, 'reduf55', 'Reinhout', 'Dufour', 'rdufour55@pandora.be', '0498-238244', '1993-04-08', '', '', 'Waarom zijn de bananen krom?', 'rd_me.jpg', 0, 2);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (3, 'juliahn', 'Julia', 'Michaels', 'juliahnmusic@gmail.com', '310-691-4489', '2015-01-01', '', '', 'I have no issues, or do I?', 'juliahn.jpg', 0, 3);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (4, 'taylorswift', 'Taylor', 'Swift', 'tswift@taylorswift.com', '615-555-5555', '2006-01-01', '', '', 'Folklore', 'taylorswift.jpg', 0, 4);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (5, 'queen', 'Freddie', 'Mercury', 'freddie@queen.com.uk', '020-7734-8932', '1956-08-01', '', '', 'Beelzebub has a devil put aside for me', 'freddie.jpg', 1, 5);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (6, 'theKing', 'Elvis', 'Presley', 'elvis@elvismusic.com', '901-332-3329', '1954-01-01', '', '', 'I love music and hamburgers', 'elvis.jpg', 1, 6);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (7, 'theking2', 'Michael', 'Jackson', 'mjackson@neverland.com', '310-859-7500', '1964-01-01', '', '', 'Thriller', 'michaeljackson.jpg', 1, 7);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (8, 'TheQueenOfPop', 'Madonna', 'Ciccone', 'madonna@lmcvrecords.com', '612-764-0850', '1958-08-16', '', '', 'I sing like a virgin, I look like Billy the puppet', 'madonna.jpg', 1, 8);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (9, 'INSERT_SYMBOL', 'Prince', 'Nelson', 'prince@paisley.com', '612-764-0850', '1978-01-01', '1978-02-01', '2016-04-21', 'Purple Rain Like its 1999', 'prince.jpg', 1, 9);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (10, 'yokos_beatle', 'John', 'Lennon', 'johnlennon@thebeatles.com', '020-7361-7676', '1960-01-01', '', '', 'Sergant Peppers trooper', 'johnlennon.jpg', 1, 10);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (11, 'nirvana', 'Kurt', 'Cobain', 'kcobain@nirvana.com', '206-302-6957', '1987-01-01', '', '', 'I made some mind-blowing music', 'kurdtcobain.jpg', 1, 11);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (12, 'jvand', 'Jan', 'Van Dyck', 'jvand@gmail.com', '0485224332', '1943-09-12', '2021-03-01', '2022-03-01', 'Samson en Bobientje... Ik bedoel Delila', 'jvand.jpg', 0, 12);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (13, 'pablopic', 'Pablo', 'Picasso', 'picasso@gmail.com', '0645987582', '1923-10-25', '', '', 'Crative is nog equal to productive', 'picasso.jpg', 0, 13);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (14, 'davidtjeh', 'David', 'Hockney', 'dhockney@gmail.com', '0746521495', '1963-05-17', '', '', 'I love to paint... Like a 5 year old.', 'dhockney.jpg', 0, 14);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (15, 'vincentv', 'Vincent', 'van Gogh', 'vgogh@gmail.com', '0645987582', '1880-05-13', '', '', 'Een mooi schilderij mag een oor kosten', 'vgogh.jpg', 0, 15);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (16, 'dalitheo', 'Salvador', 'Dali', 'sdali@yahoo.com', '0635985847', '1929-07-02', '2022-01-01', '2024-01-01', 'Zoals het klokje thuis smelt, smelt het nergens', 'sdali.jpg', 0, 16);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (17, 'cptJack', 'Johnny', 'Depp', 'jdepp@gmail.com', '555-1234', '1983-07-15', '', '', 'Savvy!', 'jdepp.jpg', 0, 17);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (18, 'thedarkknight', 'Christian', 'Bale', 'cbale@yahoo.com', '555-5678', '1995-05-02', '', '', 'The Dark Knight', 'cbale.jpg', 0, 18);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (19, 'tkruiseke', 'Tom', 'Cruise', 'tcruise@hotmail.com', '555-4321', '1990-11-18', '', '', 'Maverick auw ', 'tcruise.jpg', 0, 19);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (20, 'wetdreamswithliv', 'Liv', 'Tyler', 'ltyler@aol.com', '555-8765', '1997-09-24', '', '', 'The hottest chick of the 90s', 'ltyler.jpg', 0, 20);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (21, 'jsiegel', 'Jason', 'Segel', 'jsegel@gmail.com', '555-9876', '2002-12-01', '', '', 'How I Met Your Mother', 'jsegel.jpg', 0, 21);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (22, 'hduff', 'Hilary', 'Duff', 'hduff@yahoo.com', '555-3456', '1998-03-28', '', '', 'You may recognize me from the move Lizzie McGuire', 'hduff.jpg', 0, 22);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (23, 'hhathaway', 'Anne', 'Hathaway', 'ahathaway@hotmail.com', '555-2345', '2001-06-17', '', '', 'The Princess Diaries', 'ahathaway.jpg', 0, 23);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (24, 'mrsDoubtfire', 'Robin', 'Williams', 'rwilliams@gmail.com', '555-6789', '1978-09-14', '', '', 'Gooooood Morning VIETNAM!', 'rwilliams.jpg', 0, 24);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (25, 'lmccartney', 'Linda', 'McCartney', 'lmccartney@yahoo.com', '555-7890', '1963-11-12', '', '', 'Help!', 'lmccartney.jpg', 1, 25);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (26, 'dePeetvader', 'Marlon', 'Brando', 'mbrando@hotmail.com', '555-9012', '1950-12-19', '', '', 'Look how they massacred my boy!', 'mbrando.jpg', 1, 26);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (27, 'joffman', 'Philip', 'Hoffman', 'phoffman@gmail.com', '555-3456', '1993-02-27', '', '', 'Play it safe, always use a Capote', 'phoffman.jpg', 1, 27);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (28, 'deadpool', 'Ryan', 'Reynolds', 'rreynolds@aol.com', '555-6789', '2002-08-11', '', '', 'Deadpool', 'rreynolds.jpg', 0, 28);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (29, 'jerrys68', 'Jerry', 'Seinfeld', 'jerryseinfeld68@gmail.com', '555-123-4567', '1981-05-01', '', '', 'Whats the deal with airline food?', 'jerry.jpg', 0, 29);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (30, 'davec70', 'Dave', 'Chappelle', 'davechappelle70@gmail.com', '555-867-5309', '1990-10-01', '', '', 'Im Rick James, bitch!', 'dave.jpg', 0, 30);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (31, 'chrisc43', 'Chris', 'Rock', 'chrisrock43@gmail.com', '555-555-5555', '1984-02-07', '', '', 'I love black people, but I hate n*ggas', 'chris.jpg', 0, 31);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (32, 'billb60', 'Bill', 'Burr', 'billburr60@gmail.com', '555-555-1234', '1995-06-15', '', '', 'Im not a doctor, but I play one on TV', 'bill.jpg', 0, 32);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (33, 'benidirkx', 'Benoît', 'Dirkx', 'benoit.dirkx@gmail.com', '0486723641', '1990-12-15', '', '', 'Stand-up comedian known for his sarcastic humor', 'benoit.jpg', 0, 33);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (34, 'domindegrijse', 'Dominique', 'De Grijse', 'dominique.degrijse@gmail.com', '0475421869', '1994-06-21', '', '', 'Comedian and writer who is known for his absurd sense of humor', 'dominique.jpg', 0, 34);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (35, 'kamalsaleh', 'Kamal', 'Saleh', 'kamal.saleh@hotmail.com', '0476953214', '1991-09-13', '', '', 'Comedian and radio presenter with a quick wit and lively stage presence', 'kamal.jpg', 0, 35);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (36, 'fokkevandermeulen', 'Fokke', 'van der Meulen', 'fokke.vandermeulen@yahoo.com', '0498756432', '1987-11-02', '', '', 'Stand-up comedian and actor with a deadpan delivery style', 'fokke.jpg', 0, 36);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (37, 'joachimwannyn', 'Joachim', 'Wannyn', 'joachim.wannyn@gmail.com', '0496325874', '1998-04-30', '', '', 'Comedian and actor known for his silly and irreverent style of humor', 'joachim.jpg', 0, 37);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (38, 'najibamhali', 'Najib', 'Amhali', 'namhali@gmail.com', '0647182939', '1998-06-12', '', '', 'Alles komt goed', 'namhali.jpg', 0, 38);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (39, 'tijlbeckand', 'Tijl', 'Beckand', 'tbeckand@hotmail.com', '0654857392', '2001-02-22', '', '', 'Tijl in de hoofdrol', 'tbeckand.jpg', 0, 39);
+INSERT [project].[Gebruiker] ([ID], [username], [voornaam], [familienaam], [email], [telefoonnummer], [creatieDatum], [abonneStart], [aboneeVerval], [beschrijving], [afbeelding], [isVerwijderd], [adresID]) VALUES (40, 'hansklok', 'Hans', 'Klok', 'hklok@yahoo.com', '0612378495', '1995-10-15', '', '', 'De magische Hans Klok show', 'hklok.jpg', 0, 40);
 SET IDENTITY_INSERT [project].[Gebruiker] OFF
 GO
 
 SET IDENTITY_INSERT [project].[Product] ON
 GO
+--                          PK
+--                          INT , VARCHAR    , VARCHA, VARCHAR       , VARCHAR     , DATE          , VARCHAR    , VARCHAR  , VARCHAR      , BIT
+--                          N0  , NOT NULL   , NOT 0 , NOT NULL      , NULL        , NOT NULL      , NULL       , NULL     , NOT NULL     , NOT NULL
 INSERT [project].[Product] ([ID], [fabrikant], [naam], [beschrijving], [afbeelding], [creatieDatum], [levertijd], [weblink], [serienummer], [isBeschikbaar]) VALUES (1, 'Samsung', 'Galaxy S23', 'Een premium design met een duurzame touch, dat is wat je krijgt met de Galaxy S23. Deze nieuwste Samsung Galaxy smartphone is helemaal afgestemd op jouw stijl en wat jij belangrijk vindt. Het design is geïnspireerd op de natuur en deels ontworpen met eco-vriendelijke materialen en het besturingssysteem is precies naar jouw wens te personaliseren dankzij de nieuwe One UI 5 update.', 'SamsungGalaxyS23.jpg', '2023-03-01', 7, 'https://www.samsung.com/be/smartphones/galaxy-s23/', 'R3CNA0DA7MM', 1)
 INSERT [project].[Product] ([ID], [fabrikant], [naam], [beschrijving], [afbeelding], [creatieDatum], [levertijd], [weblink], [serienummer], [isBeschikbaar]) VALUES (2, 'Apple', 'iPhone 14', 'De nieuwe iPhone 14 is het meest geavanceerde toestel ooit gemaakt door Apple. Met een strak design, razendsnelle processor en een prachtig OLED-scherm is dit de perfecte smartphone voor de veeleisende gebruiker. De camera is voorzien van de nieuwste technologieën en maakt de mooiste fotos en videos. Dankzij de lange batterijduur hoef je je geen zorgen te maken over lege accus.', 'iPhone14.jpg', '2023-03-08', 5, 'https://www.apple.com/nl/iphone-14/', '9TGBNHY67UJ', 1)
 INSERT [project].[Product] ([ID], [fabrikant], [naam], [beschrijving], [afbeelding], [creatieDatum], [levertijd], [weblink], [serienummer], [isBeschikbaar]) VALUES (3, 'Apple', 'iPhone 14 Pro', 'De iPhone 14 Pro is de nieuwste smartphone van Apple en beschikt over een schitterend OLED-scherm en de krachtige A18-processor. Met de nieuwe ProMotion-technologie wordt het scherm automatisch aangepast op de inhoud en geniet je van soepele beelden. Dankzij de nieuwe iOS 16-update is de iPhone 14 Pro nog sneller en efficiënter in gebruik.', 'iPhone14Pro.jpg', '2023-03-05', 10, 'https://www.apple.com/nl/iphone-14-pro/', 'T6YHD2A92ZT', 1)
@@ -225,12 +264,122 @@ INSERT [project].[Product] ([ID], [fabrikant], [naam], [beschrijving], [afbeeldi
 SET IDENTITY_INSERT [project].[Product] OFF
 GO
 
+
+
+
 SET IDENTITY_INSERT [project].[Aanbod] ON
 GO
-
 -- productStatus: nieuw in verpakking, nieuwstaat, gebruikt, defect
-INSERT [project].[Aanbod] ([ID], [prijs], [productAfbeelding], [productStatus], [isGereserveerd], [productID], [koperID], [verkoperID]) VALUES (1, 1000, 'afbeelding1.jpg', 'nieuwstaat', 0, 3, 1, 10);
-
+--                         PK  ,                                                                , FK         , FK       , FK
+--                         INT , FLOAT  , VARCHAR            , VARCHAR        , BIT             , INT        , INT      , INT
+--                         N0  , NOT 0  , NULL               , NULL           , NULL            , NOT NULL   , NULL     , NOT NULL
+INSERT [project].[Aanbod] ([ID], [prijs], [productAfbeelding], [productStatus], [isGereserveerd], [productID], [koperID], [verkoperID]) VALUES (1, 1000, 'afbeelding1.jpg', 'nieuwstaat', 0, 3, 2, 10);
 SET IDENTITY_INSERT [project].[Aanbod] OFF
 GO
 
+SET IDENTITY_INSERT [project].[GebruikerProduct] ON
+GO
+--                                   PK  , FK           , FK
+--                                   INT , INT          , INT
+--                                   N0  , NOT NULL     , NOT NULL
+INSERT [project].[GebruikerProduct] ([ID], [gebruikerID], [productID]) VALUES (1, 1, 1);
+SET IDENTITY_INSERT [project].[GebruikerProduct] OFF
+GO
+
+SET IDENTITY_INSERT [project].[ProductReview] ON
+GO
+--                                PK  ,                                             , FK         , FK
+--                                INT , DATE   , VARCHAR   , VARCHAR , INT          , INT        , INT
+--                                N0  , NOT 0  , NOT NULL  , NOT NULL, NOT NULL     , NOT NULL   , NULL
+INSERT [project].[ProductReview] ([ID], [datum], [hoofding], [inhoud], [eindoordeel], [productID], [gebruikerID]) VALUES ();
+SET IDENTITY_INSERT [project].[ProductReview] OFF
+GO
+
+-- PRODUCT CATEGORIE    - PRODUCT SUBCATEGORIE - PRODUCTID
+-- Mobiel toestel       - Smartphone:          - 1,2,3,4
+-- Mobiel toestel       - Laptop:              - 5,6
+-- Beeld apparatuur     - Monitor:             - 7,8
+-- Beeld apparatuur     - TV:                  - 10,11,12
+-- Mobiel toestel       - Tablet:              - 13,14,15
+-- Audio apparatuur     - Hoofdtelefoon:       - 16,17,18
+-- Gaming               - Spelconsole:         - 19,20
+-- Gaming               - Spelcomputer:        - 9, 21
+-- Computer onderdelen  - SSD:                 - 22, 23
+-- Computer onderdelen  - Processor:           - 24,25
+-- Computer onderdelen  - Grafische kaart:     - 26,27,28
+-- Computer onderdelen  - Moederbord:          - 29, 30
+
+SET IDENTITY_INSERT [project].[ProductCategorie] ON
+GO
+--                                PK  ,       , FK
+--                                INT , VARCHA, INT
+--                                N0  , NOT 0 , NOT NULL
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (1, "Mobiel toestel", 1);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (2, "Mobiel toestel", 2);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (3, "Mobiel toestel", 3);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (4, "Mobiel toestel", 4);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (5, "Mobiel toestel", 5);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (6, "Mobiel toestel", 6);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (7, "Beeld apparatuur", 7);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (8, "Beeld apparatuur", 8);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (9, "Gaming", 9);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (10, "Gaming", 10);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (12, "Gaming", 12);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (13, "Mobiel toestel", 13);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (14, "Mobiel toestel", 14);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (15, "Mobiel toestel", 15);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (16, "Audio apparatuur", 16);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (17, "Audio apparatuur", 17);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (18, "Audio apparatuur", 18);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (19, "Gaming", 19);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (20, "Gaming", 20);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (21, "Gaming", 21);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (22, "Computer onderdelen", 22);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (23, "Computer onderdelen", 23);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (24, "Computer onderdelen", 24);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (25, "Computer onderdelen", 25);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (26, "Computer onderdelen", 26);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (27, "Computer onderdelen", 27);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (28, "Computer onderdelen", 28);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (29, "Computer onderdelen", 29);
+INSERT [project].[ProductCategorie] ([ID], [naam], [productID]) VALUES (30, "Computer onderdelen", 30);
+SET IDENTITY_INSERT [project].[ProductCategorie] OFF
+GO
+
+SET IDENTITY_INSERT [project].[ProductSubCategorie] ON
+GO
+--                                      PK  ,       , FK
+--                                      INT , VARCHA, INT
+--                                      N0  , NOT 0 , NOT NULL
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (1, "Smartphone", 1);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (2, "Smartphone", 2);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (3, "Smartphone", 3);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (4, "Smartphone", 4);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (5, "Laptop", 5);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (6, "Laptop", 6);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (7, "Monitor", 7);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (8, "Monitor", 8);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (9, "Spelcomputer", 9);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (10, "TV", 10);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (11, "TV", 11);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (12, "TV", 12);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (13, "Tablet", 13);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (14, "Tablet", 14);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (15, "Tablet", 15);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (16, "Hoofdtelefoon", 16);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (17, "Hoofdtelefoon", 17);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (18, "Hoofdtelefoon", 18);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (19, "Spelconsole", 19);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (20, "Spelconsole", 20);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (21, "Spelcomputer", 21);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (22, "SSD", 22);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (23, "SSD", 23);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (24, "Processor", 24);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (25, "Processor", 25);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (26, "Grafische kaart", 26);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (27, "Grafische kaart", 27);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (28, "Grafische kaart", 28);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (29, "Moederbord", 29);
+INSERT [project].[ProductSubCategorie] ([ID], [naam], [productCategorieID]) VALUES (30, "Moederbord", 30);
+SET IDENTITY_INSERT [project].[ProductSubCategorie] OFF
+GO
