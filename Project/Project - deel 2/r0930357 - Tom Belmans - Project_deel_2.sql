@@ -131,7 +131,7 @@ ORDER BY Naam ASC
 SELECT CONCAT(verkoper.voornaam, SPACE(1), verkoper.familienaam) AS 'Verkoper', CONCAT(p.fabrikant, SPACE(1), p.naam) AS 'Product', a.productStatus AS 'Status', ('€ ' + CONVERT(varchar, a.prijs) + ',-') AS 'Prijs',
 CASE 
     WHEN a.isGereserveerd = 1 THEN 'dit product is gereserveerd'
-    WHEN a.isGereserveerd = 0 THEN ''
+    WHEN a.isGereserveerd = 0 THEN '-/-'
 END AS 'Gereserveerd?'
 FROM project.Gebruiker AS g
     JOIN project.Aanbod AS a
@@ -141,3 +141,35 @@ FROM project.Gebruiker AS g
     JOIN project.Product AS p
     ON a.productID = p.ID
 ORDER BY verkoper.familienaam
+
+-- * Vraag 4: Toon alle gebruikers woonachtig in België en Nederland en de adressen van deze gebruikers.
+-- Geef weer of ze iets verkopen volgens deze databank, en zoja, wat ze verkopen, binnen welke categorie het product valt dat ze verkopen en de status van het product.
+
+SELECT CONCAT(g.voornaam, SPACE(1), g.familienaam) AS 'Naam', CONCAT(a.straat, ', ', a.huisnummer, SPACE(5), a.postcode, ', ', a.gemeente, SPACE(5), UPPER(a.land)) AS 'Adres',
+CASE
+    WHEN p.naam IS NULL THEN '-/-'
+    WHEN p.naam IS NOT NULL THEN CONCAT(p.fabrikant, SPACE(1), p.naam)
+END AS 'Product',
+CASE
+    WHEN c.naam IS NULL THEN '-/-'
+    WHEN c.naam IS NOT NULL THEN CONCAT(c.naam, ' - ', s.naam)
+END AS 'Categorie',
+CASE 
+    WHEN verkoper.productStatus IS NULL THEN '-/-'
+    WHEN verkoper.productStatus IS NOT NULL THEN verkoper.productStatus
+END AS 'Status'
+FROM project.Gebruiker AS g
+    JOIN project.Adres as a
+    ON a.ID = g.adresID
+    FULL OUTER JOIN project.Aanbod AS verkoper
+    ON verkoper.verkoperID = g.ID
+    FULL OUTER JOIN project.Product as p
+    ON verkoper.productID = p.ID
+    FULL OUTER JOIN project.ProductCategorie as c
+    ON p.ID = c.productID
+    FULL OUTER JOIN project.ProductSubCategorie AS s
+    ON c.ID = s.productCategorieID
+WHERE a.land = 'België' OR a.land = 'Nederland'
+ORDER BY g.voornaam DESC
+
+-- * Vraag 5: 
