@@ -100,7 +100,7 @@ FROM project.Gebruiker
 ORDER BY voornaam;
 
 -- Les 5: Joins
--- * Vraag 1: Geef de adresgegevens van alle geregsitreerde gebruikers weer.
+-- * Vraag 1: Geef de adresgegevens van alle geregistreerde gebruikers weer.
 
 SELECT g.username AS 'Gebruikersnaam', CONCAT(g.voornaam, SPACE(1), g.familienaam) AS 'Naam', CONCAT(a.straat, ', ', a.huisnummer) AS 'Adres', CONCAT(a.postcode, ', ', a.gemeente) AS 'Gemeente', a.land AS 'Land',
 CASE
@@ -112,7 +112,7 @@ FROM project.Gebruiker AS g
     ON a.ID = g.adresID
 ORDER BY Naam;
 
--- * Vraag 2: Geef de producten weer met productnaam, categorie, subcategorie en productbeschrijving welke elke geregistreerde gebruiker volgens deze databank in bezit heeft.
+-- * Vraag 2: Geef de producten weer met productnaam, categorie, subcategorie en productbeschrijving welke elke geregistreerde gebruiker in bezit heeft.
 
 SELECT CONCAT(g.voornaam, SPACE(1), g.familienaam) AS 'Naam', CONCAT(p.fabrikant, SPACE(1), p.naam) AS 'Productnaam', pc.naam AS 'Categorie', psc.naam AS 'Subcategorie', p.beschrijving AS 'Productbeschrijving'
 FROM project.Gebruiker AS g
@@ -126,7 +126,7 @@ FROM project.Gebruiker AS g
     ON psc.productCategorieID = pc.ID
 ORDER BY Naam ASC
 
--- * Vraag 3: Wie heeft wat te koop staan?
+-- * Vraag 3: Toon welke gebruikers welke artikelen te koop aanbieden.
 
 SELECT CONCAT(verkoper.voornaam, SPACE(1), verkoper.familienaam) AS 'Verkoper', CONCAT(p.fabrikant, SPACE(1), p.naam) AS 'Product', a.productStatus AS 'Status', ('€ ' + CONVERT(varchar, a.prijs) + ',-') AS 'Prijs',
 CASE 
@@ -136,14 +136,27 @@ END AS 'Gereserveerd?'
 FROM project.Gebruiker AS g
     JOIN project.Aanbod AS a
     ON a.verkoperID = g.ID
-    Join project.Gebruiker AS verkoper
+    JOIN project.Gebruiker AS verkoper
     ON a.verkoperID = verkoper.ID
     JOIN project.Product AS p
     ON a.productID = p.ID
 ORDER BY verkoper.familienaam
 
--- * Vraag 4: Toon alle gebruikers woonachtig in België en Nederland en de adressen van deze gebruikers.
--- Geef weer of ze iets verkopen volgens deze databank, en zoja, wat ze verkopen, binnen welke categorie het product valt dat ze verkopen en de status van het product.
+-- * Vraag 4: Wie heeft over welk product een product review geschreven en wat is de inhoud van de review?
+
+SELECT CONCAT(g.voornaam, SPACE(1), g.familienaam) AS 'Naam',CONCAT(p.fabrikant, SPACE(1), p.naam) AS 'Product', CONCAT('OORDEEL:' + CONVERT(varchar,pr.eindoordeel) + '/5', SPACE(3), 'HOOFDING: ' + pr.hoofding, SPACE(5), + 'INHOUD: ' + pr.inhoud) AS 'Product review'
+FROM project.Gebruiker AS g
+    LEFT JOIN project.GebruikerProduct as gp
+    ON g.ID = gp.gebruikerID
+    JOIN project.Product AS p
+    ON gp.productID = p.ID
+    JOIN project.ProductReview as pr
+    ON p.ID = pr.productID
+WHERE pr.inhoud IS NOT NULL
+ORDER BY g.familienaam
+
+-- * Vraag 5: Toon alle gebruikers woonachtig in België en Nederland en de adressen van deze gebruikers.
+-- Geef weer of ze iets verkopen, en zoja, wat ze verkopen, binnen welke categorie het product valt dat ze verkopen en de status van het product.
 
 SELECT CONCAT(g.voornaam, SPACE(1), g.familienaam) AS 'Naam', CONCAT(a.straat, ', ', a.huisnummer, SPACE(5), a.postcode, ', ', a.gemeente, SPACE(5), UPPER(a.land)) AS 'Adres',
 CASE
@@ -172,4 +185,162 @@ FROM project.Gebruiker AS g
 WHERE a.land = 'België' OR a.land = 'Nederland'
 ORDER BY g.voornaam DESC
 
--- * Vraag 5: 
+-- Les 6: Subqueries
+-- * Vraag 1: Toon de volledige naam van alle geregistreerde gebruikers uit België.
+
+SELECT CONCAT(g.voornaam, SPACE(1), g.familienaam) AS 'Naam'
+FROM project.Gebruiker AS g
+WHERE g.adresID IN (
+    SELECT a.ID
+    FROM project.Adres AS a
+    WHERE a.land = 'België'
+    )
+
+-- * Vraag 2: Toon de producten van alle actieve geregistreerde gebruikers.
+
+SELECT CONCAT(p.fabrikant, SPACE(1), p.naam) AS 'Product'
+FROM project.Product AS p
+WHERE p.ID IN (
+    SELECT gp.productID
+    FROM project.GebruikerProduct AS gp
+    WHERE gp.gebruikerID IN (
+        SELECT g.ID
+        FROM project.Gebruiker AS g
+        WHERE g.isVerwijderd = 0
+    )
+)
+
+-- * Vraag 3: Toon de prijs van alle gereserveerde producten van de fabrikanten "Apple" en "Samsung" die aangeboden worden.
+
+SELECT '€ ' + CONVERT(varchar, a.prijs) + ',-' AS 'Prijs'
+FROM project.Aanbod AS a
+WHERE a.isGereserveerd = 1 AND a.productID IN (
+    SELECT p.ID
+    FROM project.Product AS p
+    WHERE p.fabrikant LIKE '%Apple' OR p.fabrikant LIKE '%Samsung'
+)
+ORDER BY prijs DESC
+
+-- * Vraag 4: Geef de prijs, de naam van de afbeelding en de status van alle producten aangeboden door verkopers uit België of Nederland
+
+SELECT '€ ' + CONVERT(varchar, a.prijs) + ',-' AS 'Prijs', a.productAfbeelding AS 'Afbeelding', a.productStatus AS 'Status'
+FROM project.Aanbod AS a
+WHERE a.verkoperID IN (
+    SELECT g.ID
+    FROM project.Gebruiker AS g
+    WHERE g.adresID IN (
+        SELECT adres.ID
+        FROM project.Adres AS adres
+        WHERE adres.land LIKE 'België' OR adres.land LIKE 'Nederland'
+    )
+)
+ORDER BY prijs
+
+-- * Vraag 5: Geef de reviews weer van alle actieve gebruikers waarvan het land eindigd op "ië" (België, Italië, Australië, ...)
+
+SELECT CONCAT(CONVERT(varchar, pr.eindoordeel) + '/5', SPACE(3), 'TITEL: ' +  pr.hoofding) AS 'Review'
+FROM project.ProductReview AS pr
+WHERE pr.gebruikerID IN (
+    SELECT g.ID
+    FROM project.Gebruiker AS g
+    WHERE g.isVerwijderd IS NOT NULL AND g.adresID IN (
+        SELECT a.ID
+        FROM project.Adres AS a
+        WHERE a.land LIKE '%ië'
+    )
+)
+
+-- Les 6: SET-functies
+-- * Vraag 1: Toon hoeveel nieuwe producten of producten in nieuwstaat er worden aangeboden.
+-- Toon de hoogste prijs, de laagste prijs en gemiddelde prijs van deze producten.
+
+SELECT COUNT(a.ID) AS 'Aantal aangeboden producten', MAX(a.prijs) AS 'Hoogte prijs', MIN(a.prijs) AS 'Laagste prijs', AVG(a.prijs) AS 'Gemiddelde prijs'
+FROM project.Aanbod AS a
+WHERE a.productStatus LIKE 'nieuw' OR a.productStatus LIKE 'nieuwstaat'
+
+-- *Vraag 2: Toon het aantal actief geregistreerde gebruikers uit België en Nederland
+
+SELECT DISTINCT COUNT(a.ID) AS 'Geregistreerde Belgische gebruikers'
+FROM project.Adres AS a
+WHERE a.land = 'België' AND  a.ID IN
+    (SELECT g.adresID
+    FROM project.Gebruiker AS g
+    WHERE g.isVerwijderd = 0
+)
+
+-- * Vraag 3: Toon het aantal gebruikers, de hoogste score, de laagste score en de gemiddelde score van alle actieve gebruikers die niet geregistreerd zijn in België
+
+SELECT COUNT(pr.ID) AS 'Aantal gebruikers', CONVERT(varchar,MAX(pr.eindoordeel)) + '/5' AS 'Hoogste score', CONVERT(varchar,MIN(pr.eindoordeel)) + '/5' AS 'Laagste score', CONVERT(varchar,AVG(pr.eindoordeel)) + '/5' AS 'Gemiddelde score'
+FROM project.ProductReview AS pr
+WHERE pr.gebruikerID IN (
+    SELECT g.ID
+    FROM project.Gebruiker AS g
+    WHERE g.isVerwijderd IS NOT NULL AND g.adresID IN (
+        SELECT a.ID
+        FROM project.Adres AS a
+        WHERE a.land NOT LIKE 'België'
+    )
+)
+
+-- Les 7: Group By
+-- * Vraag 1 : Toon de naam, jaartal en maand van alle gebruikers die een account aangemaakt hebben vanaf het jaartal 1975.
+-- Toon hoeveel accounts er op dezelfde maand, en in hetzelfde jaartal gecreëerd zijn.
+
+SELECT CONCAT(g.voornaam, SPACE(1), g.familienaam) AS 'Naam', YEAR(g.creatieDatum) AS 'Jaartal', DATENAME(MONTH, g.creatieDatum) AS 'Maand',  COUNT(*) AS 'Accounts gecreëerd'
+FROM project.Gebruiker AS g
+WHERE YEAR(g.creatieDatum) >= 1975
+GROUP BY g.voornaam, g.familienaam, g.creatieDatum
+ORDER BY Jaartal
+
+-- * Vraag 2: Toon het aantal geregistreerde gebruikers per land waar minstens 2 gebruikers geregistreerd zijn.
+
+SELECT a.land AS 'Land', a.gemeente AS 'Gemeente', COUNT(*) AS 'Aantal gebruikers'
+FROM project.Gebruiker AS g
+    JOIN project.Adres AS a
+    ON a.ID = g.adresID
+GROUP BY a.land, a.gemeente
+HAVING COUNT(*) > 1
+ORDER BY [Aantal gebruikers] DESC
+
+-- * Vraag 3: 3.	Toon het aantal artikelen dat elke geregistreerde verkoper aanbiedt.
+
+SELECT CONCAT(g.voornaam, SPACE (1), g.familienaam) AS 'Naam', COUNT(*) AS 'Aantal artikelen te koop'
+FROM project.Gebruiker AS g
+    JOIN project.Aanbod AS a
+    ON g.ID = a.verkoperID
+WHERE g.isVerwijderd = 0
+GROUP BY g.voornaam, g.familienaam
+HAVING COUNT(*) > 0
+ORDER BY [Aantal artikelen te koop] DESC
+
+-- * Vraag 4: Toon het aantal producten per categorie en subcategorie.
+
+SELECT pc.naam AS 'Product categorie naam', psc.naam AS 'Product subcategorie naam', COUNT(*) AS 'Aantal producten'
+FROM project.Product as p
+    JOIN project.ProductCategorie AS pc
+    ON p.ID = pc.productID
+    JOIN project.ProductSubCategorie AS psc
+    ON pc.ID = psc.productCategorieID
+GROUP BY pc.naam, psc.naam
+HAVING COUNT(*) IS NOT NULL
+ORDER BY [Aantal producten] DESC
+
+-- * Vraag 5: Toon het aantal gereserveerde producten en de verkopers.
+
+SELECT CONCAT(g.voornaam, SPACE(1), g.familienaam) AS 'Naam', COUNT(*) 'Aantal gereserveerde producten'
+FROM project.Gebruiker AS g
+WHERE g.isVerwijderd = 0 AND g.ID IN (
+    SELECT gp.gebruikerID
+    FROM project.GebruikerProduct AS gp
+    WHERE gp.productID IN (
+        SELECT p.ID
+        FROM project.Product AS p
+        WHERE p.ID IN (
+            SELECT a.productID
+            FROM project.Aanbod AS a
+            WHERE a.isGereserveerd = 1
+        )
+    )
+)
+GROUP BY g.voornaam, g.familienaam
+ORDER BY g.familienaam
